@@ -3,6 +3,11 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { prisma } from '@/lib/db'
 import bcrypt from 'bcryptjs'
 
+// Build-time protection
+if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL is required in production')
+}
+
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
