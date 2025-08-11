@@ -257,10 +257,20 @@ export default function AdminPartners() {
                       src={partner.logo}
                       alt={partner.nameAz}
                       className="w-12 h-12 object-contain rounded-lg"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        target.nextElementSibling?.classList.remove('hidden');
+                      }}
                     />
                   ) : (
                     <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
                       <span className="text-gray-400 text-xs">No logo</span>
+                    </div>
+                  )}
+                  {partner.logo && (
+                    <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center hidden">
+                      <span className="text-gray-400 text-xs">Error</span>
                     </div>
                   )}
                 </td>

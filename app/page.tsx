@@ -235,13 +235,21 @@ export default async function HomePage() {
                 <div className="text-center">
                   <div className="w-16 h-16 bg-gray-200 rounded-lg mx-auto mb-3 flex items-center justify-center overflow-hidden">
                     {partner.logo ? (
-                      <Image
-                        src={partner.logo}
-                        alt={partner.nameAz}
-                        width={64}
-                        height={64}
-                        className="w-full h-full object-contain"
-                      />
+                      partner.logo.includes('blob.vercel-storage.com') ? (
+                        <img
+                          src={partner.logo}
+                          alt={partner.nameAz}
+                          className="w-full h-full object-contain"
+                        />
+                      ) : (
+                        <Image
+                          src={partner.logo}
+                          alt={partner.nameAz}
+                          width={64}
+                          height={64}
+                          className="w-full h-full object-contain"
+                        />
+                      )
                     ) : (
                       <span className="text-gray-500 text-xs font-bold">{partner.nameAz}</span>
                     )}

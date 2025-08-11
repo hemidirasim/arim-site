@@ -46,13 +46,21 @@ export default async function PartnersPage() {
                 <div className="text-center">
                   <div className="w-24 h-24 bg-gray-200 rounded-lg mx-auto mb-4 flex items-center justify-center overflow-hidden">
                     {partner.logo ? (
-                      <Image
-                        src={partner.logo}
-                        alt={partner.nameAz}
-                        width={96}
-                        height={96}
-                        className="w-full h-full object-contain"
-                      />
+                      partner.logo.includes('blob.vercel-storage.com') ? (
+                        <img
+                          src={partner.logo}
+                          alt={partner.nameAz}
+                          className="w-full h-full object-contain"
+                        />
+                      ) : (
+                        <Image
+                          src={partner.logo}
+                          alt={partner.nameAz}
+                          width={96}
+                          height={96}
+                          className="w-full h-full object-contain"
+                        />
+                      )
                     ) : (
                       <span className="text-gray-500 text-lg font-bold">{partner.nameAz}</span>
                     )}
