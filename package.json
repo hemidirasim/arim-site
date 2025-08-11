@@ -21,6 +21,7 @@
     "@prisma/client": "^5.7.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.5",
+    "@vercel/blob": "^1.1.1",
     "autoprefixer": "^10.4.16",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
