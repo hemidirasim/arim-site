@@ -172,14 +172,21 @@ export default async function HomePage() {
                 <div key={service.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
                   <div className="aspect-video bg-gray-200 flex items-center justify-center overflow-hidden">
                     {service.image ? (
-                      <Image
-                        src={service.image}
-                        alt={service.titleAz}
-                        width={400}
-                        height={225}
-                        className="w-full h-full object-cover"
-                        unoptimized={service.image.includes('blob.vercel-storage.com')}
-                      />
+                      service.image.includes('blob.vercel-storage.com') ? (
+                        <img
+                          src={service.image}
+                          alt={service.titleAz}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <Image
+                          src={service.image}
+                          alt={service.titleAz}
+                          width={400}
+                          height={225}
+                          className="w-full h-full object-cover"
+                        />
+                      )
                     ) : (
                       <span className="text-gray-500">{service.titleAz}</span>
                     )}

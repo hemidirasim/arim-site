@@ -79,13 +79,21 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
             <div className="lg:col-span-2">
               {service.image && (
                 <div className="mb-8">
-                  <Image
-                    src={service.image}
-                    alt={service.titleAz}
-                    width={800}
-                    height={400}
-                    className="w-full h-auto rounded-lg shadow-lg"
-                  />
+                  {service.image.includes('blob.vercel-storage.com') ? (
+                    <img
+                      src={service.image}
+                      alt={service.titleAz}
+                      className="w-full h-auto rounded-lg shadow-lg"
+                    />
+                  ) : (
+                    <Image
+                      src={service.image}
+                      alt={service.titleAz}
+                      width={800}
+                      height={400}
+                      className="w-full h-auto rounded-lg shadow-lg"
+                    />
+                  )}
                 </div>
               )}
               
