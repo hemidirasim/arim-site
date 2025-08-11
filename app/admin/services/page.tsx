@@ -383,10 +383,20 @@ export default function AdminServices() {
                       src={service.image}
                       alt={service.titleAz}
                       className="w-12 h-12 object-cover rounded-lg"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        target.nextElementSibling?.classList.remove('hidden');
+                      }}
                     />
                   ) : (
                     <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
                       <span className="text-gray-400 text-xs">No img</span>
+                    </div>
+                  )}
+                  {service.image && (
+                    <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center hidden">
+                      <span className="text-gray-400 text-xs">Error</span>
                     </div>
                   )}
                 </td>

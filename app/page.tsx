@@ -178,6 +178,7 @@ export default async function HomePage() {
                         width={400}
                         height={225}
                         className="w-full h-full object-cover"
+                        unoptimized={service.image.includes('blob.vercel-storage.com')}
                       />
                     ) : (
                       <span className="text-gray-500">{service.titleAz}</span>
