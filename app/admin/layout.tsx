@@ -11,18 +11,23 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
 
-  // Don't apply layout to login page
-  if (pathname === '/admin/login') {
-    return <>{children}</>
-  }
-
+  // Always call useEffect - hooks rules
   useEffect(() => {
+    if (pathname === '/admin/login') {
+      return // Don't redirect on login page
+    }
+    
     if (status === 'unauthenticated') {
       router.push('/admin/login')
     } else if (status === 'authenticated' && session?.user?.role !== 'ADMIN') {
       router.push('/admin/login')
     }
-  }, [status, session, router])
+  }, [status, session, router, pathname])
+
+  // Don't apply layout to login page
+  if (pathname === '/admin/login') {
+    return <>{children}</>
+  }
 
   if (status === 'loading') {
     return (
