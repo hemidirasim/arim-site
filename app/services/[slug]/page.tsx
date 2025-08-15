@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { ArrowLeft, CheckCircle, Star } from 'lucide-react'
 import { prisma } from '@/lib/db'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 
 interface ServiceDetailProps {
   params: { slug: string }
@@ -93,7 +94,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       src={service.image}
                       alt={service.titleAz}
                       className="w-full h-auto rounded-lg shadow-lg"
-                      loading="lazy"
+                      loading="eager"
                     />
                   ) : (
                     <Image
@@ -102,8 +103,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       width={800}
                       height={400}
                       className="w-full h-auto rounded-lg shadow-lg"
-                      priority={false}
-                      loading="lazy"
+                      priority={true}
+                      loading="eager"
                     />
                   )}
                 </div>
