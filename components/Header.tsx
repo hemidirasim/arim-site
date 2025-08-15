@@ -29,6 +29,7 @@ export default async function Header() {
     { name: 'Əsas Səhifə', href: '/' },
     { name: 'Haqqımızda', href: '/about' },
     { name: 'Xidmətlərimiz', href: '/services' },
+    { name: 'Tərəfdaşlar', href: '/partners' },
     { name: 'Əlaqə', href: '/contact' },
   ]
 
