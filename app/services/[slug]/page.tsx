@@ -13,7 +13,16 @@ interface ServiceDetailProps {
 async function getService(slug: string) {
   try {
     const service = await prisma.service.findUnique({
-      where: { slug: slug }
+      where: { slug: slug },
+      select: {
+        id: true,
+        titleAz: true,
+        descriptionAz: true,
+        contentAz: true,
+        image: true,
+        features: true,
+        slug: true
+      }
     })
     return service
   } catch (error) {
@@ -84,6 +93,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       src={service.image}
                       alt={service.titleAz}
                       className="w-full h-auto rounded-lg shadow-lg"
+                      loading="lazy"
                     />
                   ) : (
                     <Image
@@ -92,6 +102,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
                       width={800}
                       height={400}
                       className="w-full h-auto rounded-lg shadow-lg"
+                      priority={false}
+                      loading="lazy"
                     />
                   )}
                 </div>

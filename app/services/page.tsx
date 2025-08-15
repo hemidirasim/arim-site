@@ -61,6 +61,7 @@ export default async function ServicesPage() {
                           src={service.image}
                           alt={service.titleAz}
                           className="w-full h-full object-cover"
+                          loading="lazy"
                         />
                       ) : (
                         <Image
@@ -69,6 +70,7 @@ export default async function ServicesPage() {
                           width={400}
                           height={225}
                           className="w-full h-full object-cover"
+                          loading="lazy"
                         />
                       )
                     ) : (
