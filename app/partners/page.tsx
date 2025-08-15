@@ -68,16 +68,6 @@ export default async function PartnersPage() {
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">
                     {partner.nameAz}
                   </h3>
-                  {partner.website && (
-                    <a
-                      href={partner.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary-600 hover:text-primary-700 text-sm font-medium"
-                    >
-                      Veb saytı ziyarət et →
-                    </a>
-                  )}
                 </div>
               </div>
             ))}
