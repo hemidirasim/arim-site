@@ -6,6 +6,10 @@ import { ArrowRight, Star } from 'lucide-react'
 import { prisma } from '@/lib/db'
 import TestimonialsCarousel from '@/components/TestimonialsCarousel'
 
+// Force dynamic rendering to prevent caching issues
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 async function getServices() {
   try {
     const services = await prisma.service.findMany({

@@ -3,6 +3,10 @@ import Footer from '@/components/Footer'
 import Image from 'next/image'
 import { prisma } from '@/lib/db'
 
+// Force dynamic rendering to prevent caching issues
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 async function getPartners() {
   try {
     const partners = await prisma.partner.findMany({
