@@ -1,10 +1,9 @@
-'use client'
-
 import { notFound } from 'next/navigation'
+import { prisma } from '@/lib/db'
 import Image from 'next/image'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import { useEffect, useState } from 'react'
+import FancyboxInit from '@/components/FancyboxInit'
 import Script from 'next/script'
 
 export const dynamic = 'force-dynamic'
@@ -16,71 +15,26 @@ interface ProjectDetailPageProps {
   }
 }
 
-
-export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
-  const [project, setProject] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    async function fetchProject() {
-      try {
-        const response = await fetch(`/api/projects/${params.id}`)
-        if (response.ok) {
-          const data = await response.json()
-          setProject(data)
-        } else {
-          notFound()
-        }
-      } catch (error) {
-        console.error('Error fetching project:', error)
-        notFound()
-      } finally {
-        setLoading(false)
+async function getProject(id: string) {
+  try {
+    const project = await prisma.project.findUnique({
+      where: { 
+        id,
+        isActive: true 
+      },
+      include: {
+        partner: true
       }
-    }
-    
-    fetchProject()
-  }, [params.id])
-
-  useEffect(() => {
-    // Initialize Fancybox when jQuery and Fancybox are loaded
-    const initFancybox = () => {
-      if (typeof window !== 'undefined' && (window as any).jQuery && (window as any).jQuery.fancybox) {
-        (window as any).jQuery('[data-fancybox="gallery"]').fancybox({
-          buttons: [
-            "zoom",
-            "slideShow",
-            "thumbs",
-            "close"
-          ],
-          loop: true,
-          protect: true
-        })
-      }
-    }
-
-    // Check if already loaded
-    initFancybox()
-
-    // If not loaded yet, wait for it
-    const checkInterval = setInterval(initFancybox, 100)
-    
-    // Cleanup
-    return () => {
-      clearInterval(checkInterval)
-      if (typeof window !== 'undefined' && (window as any).jQuery && (window as any).jQuery.fancybox) {
-        (window as any).jQuery.fancybox.destroy()
-      }
-    }
-  }, [project])
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
-      </div>
-    )
+    })
+    return project
+  } catch (error) {
+    console.error('Error fetching project:', error)
+    return null
   }
+}
+
+export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
+  const project = await getProject(params.id)
 
   if (!project) {
     notFound()
@@ -107,6 +61,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
         href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css"
       />
       
+      <FancyboxInit />
       <Header />
       
       {/* Project Header */}
