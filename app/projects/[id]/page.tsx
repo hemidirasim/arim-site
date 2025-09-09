@@ -1,8 +1,13 @@
+'use client'
+
 import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/db'
 import Image from 'next/image'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { useEffect, useState } from 'react'
+import { Fancybox } from '@fancyapps/ui'
+import '@fancyapps/ui/dist/fancybox/fancybox.css'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -13,26 +18,49 @@ interface ProjectDetailPageProps {
   }
 }
 
-async function getProject(id: string) {
-  try {
-    const project = await prisma.project.findUnique({
-      where: { 
-        id,
-        isActive: true 
-      },
-      include: {
-        partner: true
-      }
-    })
-    return project
-  } catch (error) {
-    console.error('Error fetching project:', error)
-    return null
-  }
-}
 
-export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
-  const project = await getProject(params.id)
+export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
+  const [project, setProject] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchProject() {
+      try {
+        const response = await fetch(`/api/projects/${params.id}`)
+        if (response.ok) {
+          const data = await response.json()
+          setProject(data)
+        } else {
+          notFound()
+        }
+      } catch (error) {
+        console.error('Error fetching project:', error)
+        notFound()
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    fetchProject()
+  }, [params.id])
+
+  useEffect(() => {
+    // Initialize Fancybox
+    Fancybox.bind('[data-fancybox="gallery"]')
+
+    // Cleanup
+    return () => {
+      Fancybox.destroy()
+    }
+  }, [project])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
+      </div>
+    )
+  }
 
   if (!project) {
     notFound()
@@ -70,14 +98,20 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
         <div className="space-y-8">
           {/* Main Image */}
           {project.mainImage && (
-            <div className="relative w-full h-96 rounded-lg overflow-hidden shadow-lg">
-              <Image
-                src={project.mainImage}
-                alt={project.title}
-                fill
-                className="object-cover"
-                priority
-              />
+            <div className="relative w-full h-96 rounded-lg overflow-hidden shadow-lg cursor-pointer">
+              <a
+                href={project.mainImage}
+                data-fancybox="gallery"
+                data-caption={project.title}
+              >
+                <Image
+                  src={project.mainImage}
+                  alt={project.title}
+                  fill
+                  className="object-cover hover:opacity-90 transition-opacity"
+                  priority
+                />
+              </a>
             </div>
           )}
 
@@ -85,13 +119,19 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           {project.images && Array.isArray(project.images) && project.images.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {(project.images as string[]).map((image: string, index: number) => (
-                <div key={index} className="relative w-full h-64 rounded-lg overflow-hidden shadow-md">
-                  <Image
-                    src={image}
-                    alt={`${project.title} - Foto ${index + 1}`}
-                    fill
-                    className="object-cover"
-                  />
+                <div key={index} className="relative w-full h-64 rounded-lg overflow-hidden shadow-md cursor-pointer">
+                  <a
+                    href={image}
+                    data-fancybox="gallery"
+                    data-caption={`${project.title} - Foto ${index + 1}`}
+                  >
+                    <Image
+                      src={image}
+                      alt={`${project.title} - Foto ${index + 1}`}
+                      fill
+                      className="object-cover hover:opacity-90 transition-opacity"
+                    />
+                  </a>
                 </div>
               ))}
             </div>
