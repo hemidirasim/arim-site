@@ -53,17 +53,16 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
     )
   }
 
+  if (!project) {
+    notFound()
+  }
+
   const allImages = useMemo(() => {
-    if (!project) return []
     return [
       ...(project.mainImage ? [project.mainImage] : []),
       ...(project.images && Array.isArray(project.images) ? project.images : [])
     ]
-  }, [project])
-
-  if (!project) {
-    notFound()
-  }
+  }, [project.mainImage, project.images])
 
   const openModal = useCallback((index: number) => {
     setSelectedImageIndex(index)
