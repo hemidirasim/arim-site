@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db'
 import Image from 'next/image'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
@@ -64,24 +64,24 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
     ]
   }
 
-  const openModal = useCallback((index: number) => {
+  const openModal = (index: number) => {
     setSelectedImageIndex(index)
     setIsModalOpen(true)
-  }, [])
+  }
 
-  const closeModal = useCallback(() => {
+  const closeModal = () => {
     setIsModalOpen(false)
-  }, [])
+  }
 
-  const nextImage = useCallback(() => {
+  const nextImage = () => {
     const images = getAllImages()
     setSelectedImageIndex((prev) => (prev + 1) % images.length)
-  }, [])
+  }
 
-  const prevImage = useCallback(() => {
+  const prevImage = () => {
     const images = getAllImages()
     setSelectedImageIndex((prev) => (prev - 1 + images.length) % images.length)
-  }, [])
+  }
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
