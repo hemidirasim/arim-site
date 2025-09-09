@@ -175,10 +175,6 @@ export default function AdminProjects() {
     setFormData(prev => ({ ...prev, mainImage: url }))
   }
 
-  const handleImagesUpload = (urls: string[]) => {
-    setFormData(prev => ({ ...prev, images: [...prev.images, ...urls] }))
-  }
-
   const removeImage = (index: number) => {
     setFormData(prev => ({
       ...prev,
@@ -392,12 +388,10 @@ export default function AdminProjects() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Əsas Foto
-                    </label>
                     <ImageUpload
-                      onUpload={handleMainImageUpload}
-                      currentImage={formData.mainImage}
+                      value={formData.mainImage}
+                      onChange={handleMainImageUpload}
+                      label="Əsas Foto"
                     />
                   </div>
 
@@ -405,31 +399,40 @@ export default function AdminProjects() {
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Əlavə Fotolar
                     </label>
-                    <ImageUpload
-                      onUpload={handleImagesUpload}
-                      multiple={true}
-                      currentImages={formData.images}
-                    />
-                    {formData.images.length > 0 && (
-                      <div className="mt-2 grid grid-cols-4 gap-2">
-                        {formData.images.map((image, index) => (
-                          <div key={index} className="relative">
-                            <img
-                              src={image}
-                              alt={`Əlavə foto ${index + 1}`}
-                              className="w-full h-20 object-cover rounded-lg"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removeImage(index)}
-                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
-                            >
-                              ×
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    <div className="space-y-4">
+                      {/* Current Images */}
+                      {formData.images.length > 0 && (
+                        <div className="grid grid-cols-4 gap-2">
+                          {formData.images.map((image, index) => (
+                            <div key={index} className="relative">
+                              <img
+                                src={image}
+                                alt={`Əlavə foto ${index + 1}`}
+                                className="w-full h-20 object-cover rounded-lg"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => removeImage(index)}
+                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      
+                      {/* Add New Image */}
+                      <ImageUpload
+                        value=""
+                        onChange={(url) => {
+                          if (url) {
+                            setFormData(prev => ({ ...prev, images: [...prev.images, url] }))
+                          }
+                        }}
+                        label="Yeni foto əlavə et"
+                      />
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

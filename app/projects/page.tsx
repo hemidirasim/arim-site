@@ -94,9 +94,9 @@ export default async function ProjectsPage() {
                     </p>
                     
                     {/* Additional Images Preview */}
-                    {project.images && project.images.length > 0 && (
+                    {project.images && Array.isArray(project.images) && project.images.length > 0 && (
                       <div className="flex space-x-2 mb-4">
-                        {project.images.slice(0, 3).map((image, index) => (
+                        {(project.images as string[]).slice(0, 3).map((image: string, index: number) => (
                           <div key={index} className="w-12 h-12 bg-gray-200 rounded-lg overflow-hidden">
                             {image.includes('blob.vercel-storage.com') ? (
                               <img
@@ -115,9 +115,9 @@ export default async function ProjectsPage() {
                             )}
                           </div>
                         ))}
-                        {project.images.length > 3 && (
+                        {(project.images as string[]).length > 3 && (
                           <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                            <span className="text-xs text-gray-500">+{project.images.length - 3}</span>
+                            <span className="text-xs text-gray-500">+{(project.images as string[]).length - 3}</span>
                           </div>
                         )}
                       </div>
