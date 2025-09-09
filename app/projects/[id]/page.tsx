@@ -5,8 +5,7 @@ import Image from 'next/image'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { useEffect, useState } from 'react'
-import { Fancybox } from '@fancyapps/ui'
-import '@fancyapps/ui/dist/fancybox/fancybox.css'
+import Script from 'next/script'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -44,12 +43,34 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   }, [params.id])
 
   useEffect(() => {
-    // Initialize Fancybox
-    Fancybox.bind('[data-fancybox="gallery"]')
+    // Initialize Fancybox when jQuery and Fancybox are loaded
+    const initFancybox = () => {
+      if (typeof window !== 'undefined' && (window as any).jQuery && (window as any).jQuery.fancybox) {
+        (window as any).jQuery('[data-fancybox="gallery"]').fancybox({
+          buttons: [
+            "zoom",
+            "slideShow",
+            "thumbs",
+            "close"
+          ],
+          loop: true,
+          protect: true
+        })
+      }
+    }
 
+    // Check if already loaded
+    initFancybox()
+
+    // If not loaded yet, wait for it
+    const checkInterval = setInterval(initFancybox, 100)
+    
     // Cleanup
     return () => {
-      Fancybox.destroy()
+      clearInterval(checkInterval)
+      if (typeof window !== 'undefined' && (window as any).jQuery && (window as any).jQuery.fancybox) {
+        (window as any).jQuery.fancybox.destroy()
+      }
     }
   }, [project])
 
@@ -72,6 +93,20 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
 
   return (
     <div className="min-h-screen">
+      {/* Fancybox CDN Scripts */}
+      <Script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        strategy="beforeInteractive"
+      />
+      <Script
+        src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"
+        strategy="afterInteractive"
+      />
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css"
+      />
+      
       <Header />
       
       {/* Project Header */}
@@ -99,8 +134,8 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
           {project.mainImage && (
             <div className="relative w-full h-96 rounded-lg overflow-hidden shadow-lg cursor-pointer">
               <a
-                href={project.mainImage}
                 data-fancybox="gallery"
+                data-src={project.mainImage}
                 data-caption={project.title}
               >
                 <Image
@@ -120,8 +155,8 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
               {(project.images as string[]).map((image: string, index: number) => (
                 <div key={index} className="relative w-full h-64 rounded-lg overflow-hidden shadow-md cursor-pointer">
                   <a
-                    href={image}
                     data-fancybox="gallery"
+                    data-src={image}
                     data-caption={`${project.title} - Foto ${index + 1}`}
                   >
                     <Image
