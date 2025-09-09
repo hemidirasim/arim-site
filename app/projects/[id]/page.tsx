@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/db'
 import Image from 'next/image'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -37,8 +39,10 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+    <div className="min-h-screen">
+      <Header />
+      
+      {/* Project Header */}
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
@@ -108,6 +112,8 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           </a>
         </div>
       </div>
+
+      <Footer />
     </div>
   )
 }
