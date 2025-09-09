@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db'
 import Image from 'next/image'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
@@ -57,27 +57,27 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
     notFound()
   }
 
-  const allImages = [
-    ...(project.mainImage ? [project.mainImage] : []),
-    ...(project.images && Array.isArray(project.images) ? project.images : [])
-  ]
+  const allImages = useMemo(() => [
+    ...(project?.mainImage ? [project.mainImage] : []),
+    ...(project?.images && Array.isArray(project.images) ? project.images : [])
+  ], [project?.mainImage, project?.images])
 
-  const openModal = (index: number) => {
+  const openModal = useCallback((index: number) => {
     setSelectedImageIndex(index)
     setIsModalOpen(true)
-  }
+  }, [])
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsModalOpen(false)
-  }
+  }, [])
 
-  const nextImage = () => {
+  const nextImage = useCallback(() => {
     setSelectedImageIndex((prev) => (prev + 1) % allImages.length)
-  }
+  }, [allImages.length])
 
-  const prevImage = () => {
+  const prevImage = useCallback(() => {
     setSelectedImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length)
-  }
+  }, [allImages.length])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -94,7 +94,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
 
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [isModalOpen])
+  }, [isModalOpen, closeModal, prevImage, nextImage])
 
   return (
     <div className="min-h-screen">
