@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db'
 import Image from 'next/image'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
@@ -57,12 +57,12 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
     notFound()
   }
 
-  const allImages = useMemo(() => {
+  const getAllImages = () => {
     return [
       ...(project.mainImage ? [project.mainImage] : []),
       ...(project.images && Array.isArray(project.images) ? project.images : [])
     ]
-  }, [project.mainImage, project.images])
+  }
 
   const openModal = useCallback((index: number) => {
     setSelectedImageIndex(index)
@@ -74,12 +74,14 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   }, [])
 
   const nextImage = useCallback(() => {
-    setSelectedImageIndex((prev) => (prev + 1) % allImages.length)
-  }, [allImages.length])
+    const images = getAllImages()
+    setSelectedImageIndex((prev) => (prev + 1) % images.length)
+  }, [])
 
   const prevImage = useCallback(() => {
-    setSelectedImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length)
-  }, [allImages.length])
+    const images = getAllImages()
+    setSelectedImageIndex((prev) => (prev - 1 + images.length) % images.length)
+  }, [])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -181,7 +183,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
       </div>
 
       {/* Image Gallery Modal */}
-      {isModalOpen && allImages.length > 0 && (
+      {isModalOpen && getAllImages().length > 0 && (
         <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center">
           <div className="relative w-full h-full flex items-center justify-center p-4">
             {/* Close Button */}
@@ -193,7 +195,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
             </button>
 
             {/* Navigation Buttons */}
-            {allImages.length > 1 && (
+            {getAllImages().length > 1 && (
               <>
                 <button
                   onClick={prevImage}
@@ -213,23 +215,23 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
             {/* Main Image */}
             <div className="max-w-7xl max-h-full flex items-center justify-center">
               <img
-                src={allImages[selectedImageIndex]}
+                src={getAllImages()[selectedImageIndex]}
                 alt={`${project.title} - Foto ${selectedImageIndex + 1}`}
                 className="max-w-full max-h-full object-contain"
               />
             </div>
 
             {/* Image Counter */}
-            {allImages.length > 1 && (
+            {getAllImages().length > 1 && (
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-lg">
-                {selectedImageIndex + 1} / {allImages.length}
+                {selectedImageIndex + 1} / {getAllImages().length}
               </div>
             )}
 
             {/* Thumbnail Navigation */}
-            {allImages.length > 1 && (
+            {getAllImages().length > 1 && (
               <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex space-x-2 max-w-full overflow-x-auto">
-                {allImages.map((image, index) => (
+                {getAllImages().map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
