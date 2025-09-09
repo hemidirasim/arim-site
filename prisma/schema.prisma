@@ -58,15 +58,16 @@ model Testimonial {
 }
 
 model Partner {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   name      String
   nameAz    String
   logo      String?
   website   String?
-  isActive  Boolean  @default(true)
-  order     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  isActive  Boolean   @default(true)
+  order     Int       @default(0)
+  projects  Project[] // Layihələr
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   @@map("partners")
 }
@@ -94,6 +95,24 @@ model Contact {
   updatedAt DateTime @updatedAt
 
   @@map("contacts")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  titleAz     String
+  description String
+  descriptionAz String
+  mainImage   String?  // Əsas foto
+  images      Json?    // Əlavə fotolar array
+  partnerId   String?  // Hansı tərəfdaşa aid olduğu
+  partner     Partner? @relation(fields: [partnerId], references: [id])
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("projects")
 }
 
 enum Role {

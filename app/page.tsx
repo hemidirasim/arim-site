@@ -51,6 +51,23 @@ async function getTestimonials() {
   }
 }
 
+async function getProjects() {
+  try {
+    const projects = await prisma.project.findMany({
+      where: { isActive: true },
+      include: {
+        partner: true
+      },
+      orderBy: { order: 'asc' },
+      take: 3
+    })
+    return projects
+  } catch (error) {
+    console.error('Failed to fetch projects:', error)
+    return []
+  }
+}
+
 async function getContent() {
   try {
     const contents = await prisma.content.findMany({
@@ -71,10 +88,11 @@ async function getContent() {
 }
 
 export default async function HomePage() {
-  const [services, partners, testimonials, content] = await Promise.all([
+  const [services, partners, testimonials, projects, content] = await Promise.all([
     getServices(),
     getPartners(),
     getTestimonials(),
+    getProjects(),
     getContent()
   ])
 
@@ -275,6 +293,78 @@ export default async function HomePage() {
             >
               {content['partners_cta'] || 'Bütün tərəfdaşlarımızı görün'}
               <ArrowRight className="ml-2 w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Projects Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
+            {content['projects_title'] || 'Layihələrimiz'}
+          </h2>
+          
+          {projects.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+              {projects.map((project: any) => (
+                <div key={project.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                  <div className="aspect-video bg-gray-200 overflow-hidden">
+                    {project.mainImage ? (
+                      project.mainImage.includes('blob.vercel-storage.com') ? (
+                        <img
+                          src={project.mainImage}
+                          alt={project.titleAz}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <Image
+                          src={project.mainImage}
+                          alt={project.titleAz}
+                          width={400}
+                          height={300}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      )
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                        <span className="text-gray-500">Foto yox</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-xl font-semibold text-gray-900">
+                        {project.titleAz}
+                      </h3>
+                      {project.partner && (
+                        <span className="text-sm text-primary-600 bg-primary-50 px-2 py-1 rounded-full">
+                          {project.partner.nameAz}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-gray-600 mb-4 line-clamp-3">
+                      {project.descriptionAz}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">Tezliklə layihələrimizi burada görə biləcəksiniz.</p>
+            </div>
+          )}
+
+          <div className="text-center">
+            <Link
+              href="/projects"
+              className="inline-flex items-center px-8 py-3 bg-secondary-500 hover:bg-secondary-600 text-white font-medium rounded-lg transition-colors"
+            >
+              {content['projects_cta'] || 'Bütün layihələrimizi görün'}
+              <ArrowRight className="ml-2 w-5 h-5" />
             </Link>
           </div>
         </div>

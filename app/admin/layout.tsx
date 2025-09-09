@@ -2,7 +2,7 @@
 
 import { SessionProvider, useSession, signOut } from 'next-auth/react'
 import { useRouter, usePathname } from 'next/navigation'
-import { LogOut, Settings, Users, FileText, MessageSquare, Building2 } from 'lucide-react'
+import { LogOut, Settings, Users, FileText, MessageSquare, Building2, FolderOpen } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect } from 'react'
 
@@ -98,6 +98,13 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
               >
                 <Building2 className="w-5 h-5 mr-3" />
                 Tərəfdaşlar
+              </Link>
+              <Link
+                href="/admin/projects"
+                className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+              >
+                <FolderOpen className="w-5 h-5 mr-3" />
+                Layihələr
               </Link>
               <Link
                 href="/admin/testimonials"
