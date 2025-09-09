@@ -8,35 +8,63 @@ interface ImageUploadProps {
   onChange: (url: string) => void
   label?: string
   className?: string
+  multiple?: boolean
+  onMultipleChange?: (urls: string[]) => void
 }
 
-export default function ImageUpload({ value, onChange, label = 'Şəkil yüklə', className = '' }: ImageUploadProps) {
+export default function ImageUpload({ value, onChange, label = 'Şəkil yüklə', className = '', multiple = false, onMultipleChange }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false)
   const [error, setError] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file) return
+    const files = event.target.files
+    if (!files || files.length === 0) return
 
     setIsUploading(true)
     setError('')
 
     try {
-      const formData = new FormData()
-      formData.append('file', file)
+      if (multiple && onMultipleChange) {
+        // Multiple file upload
+        const uploadPromises = Array.from(files).map(async (file) => {
+          const formData = new FormData()
+          formData.append('file', file)
+          
+          const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+          })
+          
+          const data = await response.json()
+          
+          if (response.ok) {
+            return data.url
+          } else {
+            throw new Error(data.error || 'Yükləmə xətası')
+          }
+        })
 
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData
-      })
-
-      const data = await response.json()
-
-      if (response.ok) {
-        onChange(data.url)
+        const urls = await Promise.all(uploadPromises)
+        onMultipleChange(urls)
       } else {
-        setError(data.error || 'Yükləmə xətası')
+        // Single file upload
+        const file = files[0]
+        const formData = new FormData()
+        formData.append('file', file)
+
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+          onChange(data.url)
+        } else {
+          setError(data.error || 'Yükləmə xətası')
+        }
       }
     } catch (error) {
       setError('Yükləmə xətası')
@@ -91,9 +119,9 @@ export default function ImageUpload({ value, onChange, label = 'Şəkil yüklə'
                 <>
                   <Upload className="w-8 h-8 mb-2 text-gray-400" />
                   <p className="mb-2 text-sm text-gray-500">
-                    <span className="font-semibold">Şəkil yükləmək üçün klikləyin</span> və ya sürükləyin
+                    <span className="font-semibold">Şəkil{multiple ? 'lər' : ''} yükləmək üçün klikləyin</span> və ya sürükləyin
                   </p>
-                  <p className="text-xs text-gray-500">PNG, JPG, GIF, WEBP (max 5MB)</p>
+                  <p className="text-xs text-gray-500">PNG, JPG, GIF, WEBP (max 5MB){multiple ? ' - Çoxlu seçim mümkündür' : ''}</p>
                 </>
               )}
             </div>
@@ -102,6 +130,7 @@ export default function ImageUpload({ value, onChange, label = 'Şəkil yüklə'
               type="file"
               className="hidden"
               accept="image/*"
+              multiple={multiple}
               onChange={handleFileSelect}
               disabled={isUploading}
             />

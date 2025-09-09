@@ -366,15 +366,15 @@ export default function AdminProjects() {
                         </div>
                       )}
                       
-                      {/* Add New Image */}
+                      {/* Add New Images */}
                       <ImageUpload
                         value=""
-                        onChange={(url) => {
-                          if (url) {
-                            setFormData(prev => ({ ...prev, images: [...prev.images, url] }))
-                          }
+                        onChange={() => {}}
+                        multiple={true}
+                        onMultipleChange={(urls) => {
+                          setFormData(prev => ({ ...prev, images: [...prev.images, ...urls] }))
                         }}
-                        label="Yeni foto əlavə et"
+                        label="Yeni fotolar əlavə et (çoxlu seçim)"
                       />
                     </div>
                   </div>
