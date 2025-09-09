@@ -100,7 +100,6 @@ model Contact {
 model Project {
   id          String   @id @default(cuid())
   title       String   // Yalnız Azərbaycan dilində
-  description String   // Yalnız Azərbaycan dilində
   mainImage   String?  // Əsas foto
   images      Json?    // Əlavə fotolar array
   partnerId   String?  // Hansı tərəfdaşa aid olduğu

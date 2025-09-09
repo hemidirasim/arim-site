@@ -345,9 +345,6 @@ export default async function HomePage() {
                         </span>
                       )}
                     </div>
-                    <p className="text-gray-600 mb-4 line-clamp-3">
-                      {project.description}
-                    </p>
                   </div>
                 </div>
               ))}

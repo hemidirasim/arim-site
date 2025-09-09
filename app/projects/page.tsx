@@ -89,10 +89,6 @@ export default async function ProjectsPage() {
                       )}
                     </div>
                     
-                    <p className="text-gray-600 mb-4 line-clamp-3">
-                      {project.description}
-                    </p>
-                    
                     {/* Additional Images Preview */}
                     {project.images && Array.isArray(project.images) && project.images.length > 0 && (
                       <div className="flex space-x-2 mb-4">

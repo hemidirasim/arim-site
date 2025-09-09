@@ -7,7 +7,6 @@ import ImageUpload from '@/components/ImageUpload'
 interface Project {
   id: string
   title: string
-  description: string
   mainImage?: string
   images?: string[]
   partnerId?: string
@@ -36,7 +35,6 @@ export default function AdminProjects() {
   const [editingProject, setEditingProject] = useState<Project | null>(null)
   const [formData, setFormData] = useState({
     title: '',
-    description: '',
     mainImage: '',
     images: [] as string[],
     partnerId: '',
@@ -102,7 +100,6 @@ export default function AdminProjects() {
     setEditingProject(project)
     setFormData({
       title: project.title,
-      description: project.description,
       mainImage: project.mainImage || '',
       images: project.images || [],
       partnerId: project.partnerId || '',
@@ -153,7 +150,6 @@ export default function AdminProjects() {
   const resetForm = () => {
     setFormData({
       title: '',
-      description: '',
       mainImage: '',
       images: [],
       partnerId: '',
@@ -312,19 +308,6 @@ export default function AdminProjects() {
                       type="text"
                       value={formData.title}
                       onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Təsvir
-                    </label>
-                    <textarea
-                      value={formData.description}
-                      onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                      rows={3}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                       required
                     />

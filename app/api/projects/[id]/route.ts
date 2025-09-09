@@ -29,13 +29,12 @@ export async function PUT(
 ) {
   try {
     const body = await request.json()
-    const { title, description, mainImage, images, partnerId, isActive, order } = body
+    const { title, mainImage, images, partnerId, isActive, order } = body
 
     const project = await prisma.project.update({
       where: { id: params.id },
       data: {
         ...(title !== undefined && { title }),
-        ...(description !== undefined && { description }),
         ...(mainImage !== undefined && { mainImage }),
         ...(images !== undefined && { images }),
         ...(partnerId !== undefined && { partnerId: partnerId || null }),

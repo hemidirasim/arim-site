@@ -19,12 +19,11 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { title, description, mainImage, images, partnerId, isActive, order } = body
+    const { title, mainImage, images, partnerId, isActive, order } = body
 
     const project = await prisma.project.create({
       data: {
         title,
-        description,
         mainImage,
         images: images || [],
         partnerId: partnerId || null,
