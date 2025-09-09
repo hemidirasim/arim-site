@@ -57,13 +57,13 @@ export default async function ProjectsPage() {
                       project.mainImage.includes('blob.vercel-storage.com') ? (
                         <img
                           src={project.mainImage}
-                          alt={project.titleAz}
+                          alt={project.title}
                           className="w-full h-full object-cover"
                         />
                       ) : (
                         <Image
                           src={project.mainImage}
-                          alt={project.titleAz}
+                          alt={project.title}
                           width={400}
                           height={300}
                           className="w-full h-full object-cover"
@@ -80,7 +80,7 @@ export default async function ProjectsPage() {
                   <div className="p-6">
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="text-xl font-semibold text-gray-900">
-                        {project.titleAz}
+                        {project.title}
                       </h3>
                       {project.partner && (
                         <span className="text-sm text-primary-600 bg-primary-50 px-2 py-1 rounded-full">
@@ -90,7 +90,7 @@ export default async function ProjectsPage() {
                     </div>
                     
                     <p className="text-gray-600 mb-4 line-clamp-3">
-                      {project.descriptionAz}
+                      {project.description}
                     </p>
                     
                     {/* Additional Images Preview */}

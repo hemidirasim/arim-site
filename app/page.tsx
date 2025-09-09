@@ -337,7 +337,7 @@ export default async function HomePage() {
                   <div className="p-6">
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="text-xl font-semibold text-gray-900">
-                        {project.titleAz}
+                        {project.title}
                       </h3>
                       {project.partner && (
                         <span className="text-sm text-primary-600 bg-primary-50 px-2 py-1 rounded-full">
@@ -346,7 +346,7 @@ export default async function HomePage() {
                       )}
                     </div>
                     <p className="text-gray-600 mb-4 line-clamp-3">
-                      {project.descriptionAz}
+                      {project.description}
                     </p>
                   </div>
                 </div>
