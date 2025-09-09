@@ -308,20 +308,24 @@ export default async function HomePage() {
           {projects.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
               {projects.map((project: any) => (
-                <div key={project.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <a 
+                  key={project.id} 
+                  href={`/projects/${project.id}`}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow block"
+                >
                   <div className="aspect-video bg-gray-200 overflow-hidden">
                     {project.mainImage ? (
                       project.mainImage.includes('blob.vercel-storage.com') ? (
                         <img
                           src={project.mainImage}
-                          alt={project.titleAz}
+                          alt={project.title}
                           className="w-full h-full object-cover"
                           loading="lazy"
                         />
                       ) : (
                         <Image
                           src={project.mainImage}
-                          alt={project.titleAz}
+                          alt={project.title}
                           width={400}
                           height={300}
                           className="w-full h-full object-cover"
@@ -346,7 +350,7 @@ export default async function HomePage() {
                       )}
                     </div>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           ) : (

@@ -50,7 +50,11 @@ export default async function ProjectsPage() {
           {projects.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {projects.map((project) => (
-                <div key={project.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <a 
+                  key={project.id} 
+                  href={`/projects/${project.id}`}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow block"
+                >
                   {/* Main Image */}
                   <div className="aspect-video bg-gray-200 overflow-hidden">
                     {project.mainImage ? (
@@ -119,7 +123,7 @@ export default async function ProjectsPage() {
                       </div>
                     )}
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           ) : (
